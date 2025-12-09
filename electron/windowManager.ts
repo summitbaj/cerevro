@@ -52,17 +52,17 @@ class WindowManager {
             return;
         }
 
-        const { width } = screen.getPrimaryDisplay().workAreaSize;
+        const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
         this.widgetWindow = new BrowserWindow({
-            width: 300,
-            height: 400,
-            x: width - 320,
-            y: 100,
+            width: 1400, // Very wide to show all icons
+            height: 400, // Very tall for dock + all UI elements
+            x: Math.floor((width - 1400) / 2), // Center horizontally
+            y: height - 420, // Near bottom with padding
             frame: false,
             transparent: true,
             alwaysOnTop: true,
-            resizable: true, // Allow manual resize too
+            resizable: true,
             skipTaskbar: true,
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js'),
@@ -76,6 +76,11 @@ class WindowManager {
             : `file://${path.join(__dirname, '../dist/index.html')}#/widget`;
 
         this.widgetWindow.loadURL(url);
+
+        // Open DevTools in development to help debug
+        if (isDev) {
+            this.widgetWindow.webContents.openDevTools({ mode: 'detach' });
+        }
 
         this.widgetWindow.on('closed', () => {
             this.widgetWindow = null;
@@ -100,7 +105,7 @@ class WindowManager {
             alwaysOnTop: true,
             resizable: false,
             skipTaskbar: true,
-            focusable: false,
+            // focusable: false, // REMOVED: Needs to be focusable for keyboard events (ESC)
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js'),
                 nodeIntegration: false,
@@ -108,7 +113,8 @@ class WindowManager {
             },
         });
 
-        this.overlayWindow.setIgnoreMouseEvents(true, { forward: true });
+        // REMOVED: setIgnoreMouseEvents(true) so we can click buttons!
+        // this.overlayWindow.setIgnoreMouseEvents(true, { forward: true });
 
         const url = isDev
             ? 'http://localhost:5173/#/overlay'
@@ -119,6 +125,13 @@ class WindowManager {
         this.overlayWindow.on('closed', () => {
             this.overlayWindow = null;
         });
+    }
+
+    closeOverlay() {
+        if (this.overlayWindow) {
+            this.overlayWindow.close();
+            this.overlayWindow = null;
+        }
     }
 
     resizeWidget(width: number, height: number) {

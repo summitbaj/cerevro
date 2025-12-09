@@ -1,73 +1,69 @@
-# React + TypeScript + Vite
+# CEREVRO
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CEREVRO is a productivity and focus-enhancement desktop application built for users with ADHD. It combines a smart browser launcher, sticky focus widgets, task management, and integrated white noise tools into a unified, distraction-free environment.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 🎨 ADHD-Friendly Glassmorphic Dock
+- **Beautiful macOS-style Design**: Stunning glass UI with vibrant gradient colors and smooth animations
+- **Fully Draggable**: Position the dock anywhere on your screen - drag it to your preferred location and it remembers your choice
+- **Orientation Toggle**: Switch between horizontal and vertical layouts with one click
+- **Real Website Favicons**: Displays actual website icons for Google, Notion, Spotify, and YouTube
+- **Active App Tracking**: Visual indicators (golden border + pulsing dot) show which apps are currently open
+- **Smart Focus Integration**: When you launch an app, get a prompt to start a focus timer session
+- **Colorful Branding**: Eye-catching, colorful brain logo designed to be visually engaging for ADHD users
+- **Smooth Animations**: Gentle, non-distracting animations with hover effects and scaling
+- **Quick Access**: Launch your favorite apps with beautiful gradient-themed icons
+- **Persistent Settings**: Your dock position and orientation are saved between sessions
 
-## React Compiler
+### 🎯 Focus & Productivity
+- Full-screen focus overlay for distraction-free work sessions
+- Integrated music player with white noise and focus music
+- Task management with Zustand state management
+- Smart focus timer prompts when launching apps
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
+- **Electron**: Cross-platform desktop runtime.
+- **React**: UI library.
+- **Vite**: Build tool and dev server.
+- **TypeScript**: Type safety.
+- **Zustand**: State management.
 
-## Expanding the ESLint configuration
+## Prerequisites
+- Node.js (v18 or higher recommended)
+- npm (v9 or higher)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 1. Installation
+Clone the repository and install dependencies:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/summitbaj/cerevro.git
+cd cerevro
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Run Locally (Development)
+Start the Electro + React development environment with hot-reload:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+This will launch:
+- The backend Electron main process.
+- The React renderer process on `http://localhost:5173`.
+- The main Dashboard window.
+
+### 3. Build for Production
+To create the installable executable for your OS (Windows .exe or macOS .dmg):
+
+```bash
+npm run build
+```
+The output files will be located in the `dist-app/` directory.
+
+## Project Structure
+- `electron/`: Main process code (OS interactions, window management).
+- `src/`: React renderer code (UI components, styles).
+- `dist-app/`: Packaged application output.

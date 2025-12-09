@@ -69,6 +69,60 @@ class BrowserLauncher {
         }
         return '';
     }
+
+    /**
+     * Get list of available profiles for a browser
+     */
+    getProfiles(browser: BrowserType): BrowserProfile[] {
+        const profiles: BrowserProfile[] = [];
+        let userDataPath = '';
+
+        if (browser === 'chrome') {
+            if (process.platform === 'win32') {
+                userDataPath = path.join(os.homedir(), 'AppData', 'Local', 'Google', 'Chrome', 'User Data');
+            } else if (process.platform === 'darwin') {
+                userDataPath = path.join(os.homedir(), 'Library', 'Application Support', 'Google', 'Chrome');
+            }
+        } else if (browser === 'edge') {
+            if (process.platform === 'win32') {
+                userDataPath = path.join(os.homedir(), 'AppData', 'Local', 'Microsoft', 'Edge', 'User Data');
+            }
+        }
+
+        if (!userDataPath || !fs.existsSync(userDataPath)) {
+            return [{ name: 'Default', directory: 'Default' }];
+        }
+
+        try {
+            const items = fs.readdirSync(userDataPath);
+
+            // Add Default profile
+            if (fs.existsSync(path.join(userDataPath, 'Default'))) {
+                profiles.push({ name: 'Default', directory: 'Default' });
+            }
+
+            // Add numbered profiles (Profile 1, Profile 2, etc.)
+            items.forEach(item => {
+                if (item.startsWith('Profile ')) {
+                    const prefsPath = path.join(userDataPath, item, 'Preferences');
+                    if (fs.existsSync(prefsPath)) {
+                        try {
+                            const prefs = JSON.parse(fs.readFileSync(prefsPath, 'utf-8'));
+                            const profileName = prefs.profile?.name || item;
+                            profiles.push({ name: profileName, directory: item });
+                        } catch {
+                            profiles.push({ name: item, directory: item });
+                        }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error reading profiles:', error);
+            return [{ name: 'Default', directory: 'Default' }];
+        }
+
+        return profiles.length > 0 ? profiles : [{ name: 'Default', directory: 'Default' }];
+    }
 }
 
 export const browserLauncher = new BrowserLauncher();
