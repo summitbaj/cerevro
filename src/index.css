@@ -1,0 +1,15 @@
+@import './styles/theme.css';
+@import './styles/utilities.css';
+@import './styles/scrollbar.css';
+
+/* Basic Reset included in theme.css mostly, but adding specific app utilities here */
+#root {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Prevent scrolling on main container usually */
+}
